@@ -52,38 +52,38 @@ void DrivebasePoseBehaviour::OnTick(units::second_t deltaTime){
   }
 }
 
-DrivebaseBalance::DrivebaseBalance(wom::SwerveDrive *swerveDrivebase) : _swerveDrivebase(swerveDrivebase) {
-  Controls(swerveDrivebase);
-}
-void DrivebaseBalance::OnTick(units::second_t deltaTime){
-  // assumes that the robot is already rotated correctly
+// DrivebaseBalance::DrivebaseBalance(wom::SwerveDrive *swerveDrivebase, frc::XboxController *driverController) : _swerveDrivebase(swerveDrivebase), _driverController(driverController) {
+//   Controls(swerveDrivebase);
+// }
+// void DrivebaseBalance::OnTick(units::second_t deltaTime){
+//   // assumes that the robot is already rotated correctly
 
-  _currentSwervePose = _swerveDrivebase->GetPose();
-  double xDistance = (_convergencePoint.X() - _currentSwervePose.X()).value();
-  double yDistance = (_convergencePoint.Y() - _currentSwervePose.Y()).value();
-  double distanceToTarget = sqrt(pow(xDistance, 2) + pow(yDistance, 2));
-  if (abs(distanceToTarget) < _maxDistance) {
-     _swerveDrivebase->SetFieldRelativeVelocity(wom::FieldRelativeSpeeds {
-        (0.6_m / (1 + exp(-0.15 * xDistance)) - 0.3_m) / 1_s,
-        (0.6_m / (1 + exp(-0.15 * yDistance)) - 0.3_m) / 1_s,
-        0_deg / 1_s
-      });
-  }
-  else {
-    double angle = atan(yDistance / xDistance);
-    _maxConvergenceSpeed / sin(angle);
-    _swerveDrivebase->SetFieldRelativeVelocity(wom::FieldRelativeSpeeds {
-        _maxConvergenceSpeed / sin(angle) / 1_s,
-        _maxConvergenceSpeed / cos(angle) / 1_s,
-        0_deg / 1_s
-    });
-  }
-
-
+//   _currentSwervePose = _swerveDrivebase->GetPose();
+//   double xDistance = (_convergencePoint.X() - _currentSwervePose.X()).value();
+//   double yDistance = (_convergencePoint.Y() - _currentSwervePose.Y()).value();
+//   double distanceToTarget = sqrt(pow(xDistance, 2) + pow(yDistance, 2));
+//   if (abs(distanceToTarget) < _maxDistance) {
+//      _swerveDrivebase->SetFieldRelativeVelocity(wom::FieldRelativeSpeeds {
+//         (0.6_m / (1 + exp(-0.15 * xDistance)) - 0.3_m) / 1_s,
+//         (0.6_m / (1 + exp(-0.15 * yDistance)) - 0.3_m) / 1_s,
+//         0_deg / 1_s
+//       });
+//   }
+//   else {
+//     double angle = atan(yDistance / xDistance);
+//     _maxConvergenceSpeed / sin(angle);
+//     _swerveDrivebase->SetFieldRelativeVelocity(wom::FieldRelativeSpeeds {
+//         _maxConvergenceSpeed / sin(angle) / 1_s,
+//         _maxConvergenceSpeed / cos(angle) / 1_s,
+//         0_deg / 1_s
+//     });
+//   }
 
 
-}
 
-void DrivebaseBalance::SetConvergencePoint(frc::Pose2d pose){
-  _convergencePoint = pose;
-}
+
+// }
+
+// void DrivebaseBalance::SetConvergencePoint(frc::Pose2d pose){
+//   _convergencePoint = pose;
+// }

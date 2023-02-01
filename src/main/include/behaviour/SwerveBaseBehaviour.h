@@ -39,18 +39,21 @@ class DrivebasePoseBehaviour : public behaviour::Behaviour{
   frc::Pose2d _pose; // storing it directly, so not a pointer
 };
 
-class DrivebaseBalance : public behaviour::Behaviour{
- public:
-  DrivebaseBalance(wom::SwerveDrive *swerveDrivebase);
+// class DrivebaseBalance : public behaviour::Behaviour{
+//  public:
+//   DrivebaseBalance(wom::SwerveDrive *swerveDrivebase, frc::XboxController *driverController);
 
-  void OnTick(units::second_t deltaTime) override;
-  void SetConvergencePoint(frc::Pose2d pose);
+//   void OnTick(units::second_t deltaTime) override;
+//   void SetConvergencePoint(frc::Pose2d pose);
 
- private:
-  wom::SwerveDrive *_swerveDrivebase;
-  double *_gyroAngle;
-  frc::Pose2d _convergencePoint;
-  frc::Pose2d _currentSwervePose;
-  const double _maxDistance = 0.3;
-  const units::meter_t _maxConvergenceSpeed = 0.3_m;
-};
+//  private:
+//   wom::SwerveDrive *_swerveDrivebase;
+//   frc::XboxController *_driverController;
+//   double *_gyroAngle;
+//   frc::Pose2d _convergencePoint;
+//   frc::Pose2d _currentSwervePose;
+//   const double _maxDistance = 0.3;
+//   const units::meter_t _maxConvergenceSpeed = 0.3_m;
+
+
+// };
