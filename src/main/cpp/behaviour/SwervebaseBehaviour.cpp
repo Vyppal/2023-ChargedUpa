@@ -56,7 +56,34 @@ DrivebaseBalance::DrivebaseBalance(wom::SwerveDrive *swerveDrivebase) : _swerveD
   Controls(swerveDrivebase);
 }
 void DrivebaseBalance::OnTick(units::second_t deltaTime){
-  // determine if it's moving, speed based off of roll back speed
+  // assumes that the robot is already rotated correctly
 
-  // get a feel for the wheel before doing this
+  _currentSwervePose = _swerveDrivebase->GetPose();
+  double xDistance = (_convergencePoint.X() - _currentSwervePose.X()).value();
+  double yDistance = (_convergencePoint.Y() - _currentSwervePose.Y()).value();
+  double distanceToTarget = sqrt(pow(xDistance, 2) + pow(yDistance, 2));
+  if (abs(distanceToTarget) < _maxDistance) {
+     _swerveDrivebase->SetFieldRelativeVelocity(wom::FieldRelativeSpeeds {
+        (0.6_m / (1 + exp(-0.15 * xDistance)) - 0.3_m) / 1_s,
+        (0.6_m / (1 + exp(-0.15 * yDistance)) - 0.3_m) / 1_s,
+        0_deg / 1_s
+      });
+  }
+  else {
+    double angle = atan(yDistance / xDistance);
+    _maxConvergenceSpeed / sin(angle);
+    _swerveDrivebase->SetFieldRelativeVelocity(wom::FieldRelativeSpeeds {
+        _maxConvergenceSpeed / sin(angle) / 1_s,
+        _maxConvergenceSpeed / cos(angle) / 1_s,
+        0_deg / 1_s
+    });
+  }
+
+
+
+
+}
+
+void DrivebaseBalance::SetConvergencePoint(frc::Pose2d pose){
+  _convergencePoint = pose;
 }

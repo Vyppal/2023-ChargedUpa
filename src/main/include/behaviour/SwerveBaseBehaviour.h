@@ -44,8 +44,13 @@ class DrivebaseBalance : public behaviour::Behaviour{
   DrivebaseBalance(wom::SwerveDrive *swerveDrivebase);
 
   void OnTick(units::second_t deltaTime) override;
+  void SetConvergencePoint(frc::Pose2d pose);
 
  private:
   wom::SwerveDrive *_swerveDrivebase;
   double *_gyroAngle;
+  frc::Pose2d _convergencePoint;
+  frc::Pose2d _currentSwervePose;
+  const double _maxDistance = 0.3;
+  const units::meter_t _maxConvergenceSpeed = 0.3_m;
 };

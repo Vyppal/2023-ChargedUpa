@@ -74,25 +74,6 @@ void Robot::TeleopInit() {
   BehaviourScheduler *sched = BehaviourScheduler::GetInstance();
 
   swerve->OnStart();
-
-  // map.controllers.driver.A(&loop).Rising().IfHigh([sched, this]() {
-  //   sched->Schedule(make<ArmavatorGoToPositionBehaviour>(armavator, ArmavatorPosition{0.2_m, 0_deg}));
-  // });
-
-  // map.controllers.driver.B(&loop).Rising().IfHigh([sched, this]() {
-  //   sched->Schedule(make<ArmavatorGoToPositionBehaviour>(armavator, ArmavatorPosition{1.2_m, -75_deg}));
-  // });
-
-  // map.controllers.driver.X(&loop).Rising().IfHigh([sched, this]() {
-  //   sched->Schedule(make<ArmavatorGoToPositionBehaviour>(armavator, ArmavatorPosition{1.0_m, 240_deg}));
-  // });
-
-  // map.controllers.driver.Y(&loop).Rising().IfHigh([sched, this]() {
-  //   sched->Schedule(make<ArmavatorGoToPositionBehaviour>(armavator, ArmavatorPosition{0_m, 0_deg}));
-  // });
-
-  // if(!map.controllers.codriver.GetAButton() && !map.controllers.codriver.GetBButton() && map.controllers.codriver.GetRightTriggerAxis() <= 0.05 && map.controllers.codriver.GetLeftTriggerAxis() <= 0.05) {
-  //   map.armavator.arm.gearbox.transmission->SetVoltage(0_V);
   
 
   // Swervedrivebase grid poses
@@ -129,6 +110,10 @@ void Robot::TeleopInit() {
     }
   });
 
+  if (map.controllers.driver.GetRightBumper()){
+    sched->Schedule(make<DrivebaseBalance>(swerve));
+  }
+  
   swerve->OnStart();
 
 

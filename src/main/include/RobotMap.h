@@ -165,7 +165,6 @@ struct RobotMap {
 
   SwerveBase swerveBase;
 
-
   struct SwerveGridPoses { // positions to place the items
     frc::Pose2d innerGrid1 = frc::Pose2d(1_m, 1_m, 0_deg); // Closest grid position to the Wall
     frc::Pose2d innerGrid2 = frc::Pose2d(1_m, 2_m, 0_deg); // Middle of Inner Grid
@@ -178,6 +177,8 @@ struct RobotMap {
     frc::Pose2d outerGrid3 = frc::Pose2d(1_m, 9_m, 0_deg); // Closest grid position to enemy Loading Zone
   };
   SwerveGridPoses swerveGridPoses;
+  
+
 
   struct IntakeSystem {
     WPI_TalonSRX rightMotor{98};
