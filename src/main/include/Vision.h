@@ -1,40 +1,44 @@
 #pragma once
 
+#include "behaviour/HasBehaviour.h"
+
 #include <frc/geometry/Transform3d.h>
-#include <frc/geometry/Pose3d.h>
 #include <photonlib/PhotonCamera.h>
-#include <photonlib/SimPhotonCamera.h>
 #include <photonlib/RobotPoseEstimator.h>
-#include <NTUtil.h>
+#include <photonlib/SimPhotonCamera.h>
+#include <frc/geometry/Pose3d.h>
+#include <math.h>
+#include <iostream>
+#include <units/length.h>
+#include "NTUtil.h"
+#include "Util.h"
 #include <wpi/json.h>
 #include <frc/apriltag/AprilTagFields.h>
 #include <frc/apriltag/AprilTagFieldLayout.h>
-#include <frc/geometry/Transform3d.h>
+
 
 using namespace photonlib;
 
-std::shared_ptr<frc::AprilTagFieldLayout> Get2023Layout() {
-  return std::make_shared<frc::AprilTagFieldLayout>(frc::LoadAprilTagLayoutField(frc::AprilTagField::k2023ChargedUp));
-};
+std::shared_ptr<frc::AprilTagFieldLayout> Get2023Layout();
+
 
 // pp stands for photonpipeline in variable naming
 
 struct VisionConfig {
-  std::shared_ptr<PhotonCamera> camera;
-
+  std::shared_ptr<photonlib::PhotonCamera> camera;
+  frc::Transform3d robotToCamera;
   units::radian_t fov;
-  frc::Transform3d robotToCamera; // assuming this means centre of robot to camera, but UNSURE
   std::shared_ptr<frc::AprilTagFieldLayout> layout;
 };
 
-class Vision {
+class Vision : public behaviour::HasBehaviour {
   private :
     VisionConfig defaultConfig;
     VisionConfig visionConfig;
+    VisionConfig *_config;
     RobotPoseEstimator _estimator;
   public :
-    // Vision(VisionConfig config, RobotPoseEstimator _estimator);
-    Vision(VisionConfig config/*, RobotPoseEstimator _estimator*/);
+    Vision(VisionConfig *config);
     
     void OnUpdate(units::second_t dt); 
 
@@ -80,5 +84,3 @@ class Vision {
     return bestTargetPose;
   };
 };
-
-std::shared_ptr<frc::AprilTagFieldLayout> Get2023Layout();

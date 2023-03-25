@@ -1,15 +1,16 @@
 #include "Vision.h"
 
-// initializer for estimator
-using map_value_type = std::pair<std::shared_ptr<PhotonCamera>, frc::Transform3d>;
-Vision::Vision(VisionConfig config) 
-  : visionConfig(config),
-  _estimator(RobotPoseEstimator{
-    config.layout,
-    photonlib::AVERAGE_BEST_TARGETS,
-    {std::make_pair(config.camera, config.robotToCamera)}
-    }
+Vision::Vision(VisionConfig *config) : _config(config), _estimator(config->layout, photonlib::AVERAGE_BEST_TARGETS, {std::make_pair(config->camera, config->robotToCamera)})
+{ }
 
-    ),
-  defaultConfig(config)
-{ };
+std::shared_ptr<frc::AprilTagFieldLayout> Get2023Layout() {
+  return std::make_shared<frc::AprilTagFieldLayout>(frc::LoadAprilTagLayoutField(frc::AprilTagField::k2023ChargedUp));
+};
+
+void Vision::OnUpdate(units::second_t dt) {
+  //photonlib::PhotonPipelineResult result = _config.camera->GetLatestResult();
+  // photonlib::PhotonTrackedTarget target = result.GetBestTarget();
+  std::pair<frc::Pose3d, units::millisecond_t> pose_result = _estimator.Update();
+  auto table = nt::NetworkTableInstance::GetDefault().GetTable("Vision");
+  wom::WritePose3NT(table, pose_result.first);
+}
