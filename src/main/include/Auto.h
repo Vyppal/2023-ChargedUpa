@@ -6,118 +6,41 @@
 std::shared_ptr<behaviour::Behaviour> BlueSinglePiece();
 =======
 #include "drivetrain/SwerveDrive.h"
+#include "Armavator.h"
+#include "Gripper.h"
+#include "Poses.h"
 
 
+struct Drivebase {
+  wom::SwerveDrive *swerve;
+  wom::NavX *gyro;
+};
 
 /*
-Starting Poses corresponding with:
-    Top:  frc::Pose2d{0_m, 0_m, 0_deg}
-    Middle: frc::Pose2d{0_m, 0_m, 0_deg}
-    Bottom: frc::Pose2d{0_m, 0_m, 0_deg}
+for CollectDock, could move the Collect out of the switch statement
+we can treat it like an else condition, and then we do if (collect) and if (collectDock), both using same variable names
 */
 
-std::shared_ptr<behaviour::Behaviour> Drive(wom::SwerveDrive *swerve, wom::NavX *gyro);
+// AutoPathDetails GetAutoPathingDetails(Drivebase drivebase, StartingConfig startConfig, EndingConfig endConfig, bool blueAlliance, int calledFromID, std::vector<frc::Pose2d> adjustmentPoses = {});
+
+// std::shared_ptr<behaviour::Behaviour> DockBot(Drivebase drivebase, bool blueAlliance, StartingConfig startConfig, EndingConfig endConfig);
+
+// std::shared_ptr<behaviour::Behaviour> Single(Drivebase drivebase, Armavator *armavator , Gripper *gripper, bool blueAlliance, StartingConfig startConfig, EndingConfig endConfig);
+
+// std::shared_ptr<behaviour::Behaviour> Double(Drivebase drivebase, bool blueAlliance, StartingConfig startConfig, EndingConfig endConfig);
+
+// std::shared_ptr<behaviour::Behaviour> Triple(Drivebase drivebase, bool blueAlliance, StartingConfig startConfig, EndingConfig endConfig);
+
+// std::shared_ptr<behaviour::Behaviour> Quad(Drivebase drivebase, bool blueAlliance, StartingConfig startConfig, EndingConfig endConfig);
+
+// std::shared_ptr<behaviour::Behaviour> Quintuple(Drivebase drivebase, bool blueAlliance, StartingConfig startConfig, EndingConfig endConfig);
+
+std::shared_ptr<behaviour::Behaviour> ForwardDrive(Drivebase drivebase, Armavator *armavator);
+
+std::shared_ptr<behaviour::Behaviour> Balance(Drivebase drivebase, Armavator *armavator);
 
 
-enum endingConfig {
-    Dock,
-    Steal,
-    Collect,
-    PrepareManual, // get rdy to go collect from substation
-    Taxi
-};
-
-enum startingConfig {
-    Top,
-    Middle,
-    Bottom
-};
-
-
-
-
-// std::shared_ptr<behaviour::Behaviour> Dock(wom::SwerveDrive *swerve, bool blueAlliance, enum startingConfig, enum endingConfig);
-
-// std::shared_ptr<behaviour::Behaviour> Single(wom::SwerveDrive *swerve, bool blueAlliance, bool dock, enum startPos, enum endPos);
-
-// std::shared_ptr<behaviour::Behaviour> Double(wom::SwerveDrive *swerve, bool blueAlliance, bool dock, enum startPos, enum endPos);
-
-// std::shared_ptr<behaviour::Behaviour> Triple(wom::SwerveDrive *swerve, bool blueAlliance, bool dock, enum startPos, enum endPos);
-
-// std::shared_ptr<behaviour::Behaviour> Quad(wom::SwerveDrive *swerve, bool blueAlliance, bool dock, enum startPos, enum endPos);
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Assuming in auto we only score high
-
-// BLUE
-
-// Docking Only
-std::shared_ptr<behaviour::Behaviour> BLUE_Top_Dock(wom::SwerveDrive *swerve);
-std::shared_ptr<behaviour::Behaviour> BLUE_Middle_Dock(wom::SwerveDrive *swerve);
-std::shared_ptr<behaviour::Behaviour> BLUE_Bottom_Dock(wom::SwerveDrive *swerve);
-
-// Single Score                 <- We should not need to move for this
-std::shared_ptr<behaviour::Behaviour> BLUE_Single(wom::SwerveDrive *swerve);
-
-// Single Score + Dock          <- We should only be in middle for doing this one
-std::shared_ptr<behaviour::Behaviour> BLUE_Single_Dock(wom::SwerveDrive *swerve);
-
-// Triple Score                 <- We should never be in the middle for doing this one
-std::shared_ptr<behaviour::Behaviour> BLUE_Top_Triple(wom::SwerveDrive *swerve);
-std::shared_ptr<behaviour::Behaviour> BLUE_Bottom_Triple(wom::SwerveDrive *swerve);
-
-// Double Score + Dock          <- We should never be in the middle for doing this one
-std::shared_ptr<behaviour::Behaviour> BLUE_Top_Double_Dock(wom::SwerveDrive *swerve);
-std::shared_ptr<behaviour::Behaviour> BLUE_Bottom_Double_Dock(wom::SwerveDrive *swerve);
-
-// Double                       <- We should never be in the middle for doing this one
-std::shared_ptr<behaviour::Behaviour> BLUE_Top_Double(wom::SwerveDrive *swerve);
-std::shared_ptr<behaviour::Behaviour> BLUE_Bottom_Double(wom::SwerveDrive *swerve);
-
-// Quad Collect                 <- We should never be in the middle for doing this one
-std::shared_ptr<behaviour::Behaviour> BLUE_Top_Quad_Collect(wom::SwerveDrive *swerve);
-std::shared_ptr<behaviour::Behaviour> BLUE_Bottom_Quad_Collect(wom::SwerveDrive *swerve);
-
-
-
-// RED
-
-// Docking Only
-std::shared_ptr<behaviour::Behaviour> RED_Top_Dock(wom::SwerveDrive *swerve);
-std::shared_ptr<behaviour::Behaviour> RED_Middle_Dock(wom::SwerveDrive *swerve);
-std::shared_ptr<behaviour::Behaviour> RED_Bottom_Dock(wom::SwerveDrive *swerve);
-
-// Single Score                 <- We should not need to move for this
-std::shared_ptr<behaviour::Behaviour> RED_Single(wom::SwerveDrive *swerve);
-
-// Single Score + Dock          <- We should only be in middle for doing this one
-std::shared_ptr<behaviour::Behaviour> RED_Single_Dock(wom::SwerveDrive *swerve);
-
-// Triple Score                 <- We should never be in the middle for doing this one
-std::shared_ptr<behaviour::Behaviour> RED_Top_Triple(wom::SwerveDrive *swerve);
-std::shared_ptr<behaviour::Behaviour> RED_Bottom_Triple(wom::SwerveDrive *swerve);
-
-// Double Score + Dock          <- We should never be in the middle for doing this one
-std::shared_ptr<behaviour::Behaviour> RED_Top_Double_Dock(wom::SwerveDrive *swerve);
-std::shared_ptr<behaviour::Behaviour> RED_Bottom_Double_Dock(wom::SwerveDrive *swerve);
-
-// Double                       <- We should never be in the middle for doing this one
-std::shared_ptr<behaviour::Behaviour> RED_Top_Double(wom::SwerveDrive *swerve);
-std::shared_ptr<behaviour::Behaviour> RED_Bottom_Double(wom::SwerveDrive *swerve);
-
-// Quad Collect                 <- We should never be in the middle for doing this one
-std::shared_ptr<behaviour::Behaviour> RED_Top_Quad_Collect(wom::SwerveDrive *swerve);
-std::shared_ptr<behaviour::Behaviour> RED_Bottom_Quad_Collect(wom::SwerveDrive *swerve);
-
->>>>>>> 196464c2623a52754945b90214277c13fd1c436b
+std::shared_ptr<behaviour::Behaviour> LowPlace(Armavator *armavator , Gripper *gripper);
+std::shared_ptr<behaviour::Behaviour> HighPlace(Armavator *armavator , Gripper *gripper);
+std::shared_ptr<behaviour::Behaviour> Taxi(Drivebase drivebase, Armavator *armavator);
+std::shared_ptr<behaviour::Behaviour> Dock(Drivebase drivebase, Armavator *armavator);

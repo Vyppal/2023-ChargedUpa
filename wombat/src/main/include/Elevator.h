@@ -15,42 +15,48 @@
 #include <memory>
 
 namespace wom {
-  //creates states used for the elevator
   enum class ElevatorState {
     kIdle, 
     kPID,
     kManual,
-    kRaw
+    kVelocity
   };
 
-  //creates infromation that is used in the config
   struct ElevatorConfig {
     std::string path;
-    wom::Gearbox gearbox;
+    wom::Gearbox leftGearbox;
+    wom::Gearbox rightGearbox;
+    rev::SparkMaxRelativeEncoder elevatorEncoder;
     frc::DigitalInput *topSensor;
     frc::DigitalInput *bottomSensor;
     units::meter_t radius;
     units::kilogram_t mass;
-    units::meter_t maxHeight = 1.33_m;
-    units::meter_t minHeight = 0.28_m;
-    units::meter_t initialHeight = 0_m;
+    units::meter_t maxHeight;
+    units::meter_t minHeight;
+    units::meter_t initialHeight;
     PIDConfig<units::meter, units::volt> pid;
+    PIDConfig<units::meters_per_second, units::volt> velocityPID;
 
     void WriteNT(std::shared_ptr<nt::NetworkTable> table);
   };
 
-  //allows the states to be useable
   class Elevator : public behaviour::HasBehaviour {
    public: 
     Elevator(ElevatorConfig params);
 
-    //creates functions for the states with the nessesary information
     void OnUpdate(units::second_t dt);
 
     void SetManual(units::volt_t voltage);
     void SetPID(units::meter_t height);
     void SetIdle();
-    void SetRaw(units::volt_t voltage);
+    void SetRaw();
+
+    void SetVelocity(units::meters_per_second_t velocity);
+
+    units::volt_t GetRaw();
+
+    double GetElevatorEncoderPos();
+    void SetElevatorSpeedLimit(double limit);
 
     ElevatorConfig &GetConfig();
     
@@ -59,18 +65,20 @@ namespace wom {
 
     units::meter_t GetHeight() const;
     units::meters_per_second_t MaxSpeed() const;
+    units::meters_per_second_t GetElevatorVelocity() const;
   
    private:
-   //information that cannot be changed or edited by user
     units::volt_t _setpointManual{0};
 
     ElevatorConfig _config;
     ElevatorState _state;
+    double speedLimit = 0.5;
+
+    units::meters_per_second_t _velocity;
 
     PIDController<units::meter, units::volt> _pid;
+    PIDController<units::meters_per_second, units::volt> _velocityPID;
 
     std::shared_ptr<nt::NetworkTable> _table;
-
-    units::volt_t _voltage{0};
   };
 };
