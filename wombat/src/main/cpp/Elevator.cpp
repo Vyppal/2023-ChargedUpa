@@ -123,8 +123,6 @@ double Elevator::GetElevatorEncoderPos() {
 }
 
 units::meter_t Elevator::GetHeight() const {
-  // std::cout << "elevator position"<< _config.rightGearbox.encoder->GetEncoderTicks() << std::endl;
-  // return _config.rightGearbox.encoder->GetEncoderDistance() * 1_m;
   return _config.elevatorEncoder.GetPosition() * 14/60 * 2 * 3.1415 * 0.02225 * 1_m;
 }
 
